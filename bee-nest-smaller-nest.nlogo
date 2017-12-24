@@ -34,11 +34,11 @@ to setup
   set max-time-on-site 500
   set max-time-on-nest 1000
   set arena patches
-  set nest patches with [ (pxcor >= -1) and (pxcor <= 10) and (pycor <= 0) and (pycor >= -16) ]
+  set nest patches with [ (pxcor >= -5) and (pxcor <= 5) and (pycor <= -5) and (pycor >= min-pycor) ]
   ask nest [ set pcolor grey + 2]
-  set blue-site patches with [ (pxcor >= 25) and (pxcor <= 30)  and (pycor <= 16) and (pycor >= -16) ]
+  set blue-site patches with [ (pxcor >= 25) and (pxcor <= 30)  and (pycor <= 16) and (pycor >= 6) ]
   ask blue-site [ set pcolor blue - 1.5]
-  set red-site patches with [ (pxcor <= -25) and (pxcor >= -30) and (pycor <= 16) and (pycor >= -16) ]
+  set red-site patches with [ (pxcor <= -25) and (pxcor >= -30) and (pycor <= 16) and (pycor >= 6) ]
   ask red-site [ set pcolor red - 1.5]
   ask patch (min-pxcor + 4) (max-pycor) [ set plabel "SITE-1" ]
   ask patch (min-pxcor + 4) (max-pycor - 1) [ set plabel "Quality:" ]
@@ -46,7 +46,7 @@ to setup
   ask patch (max-pxcor - 1) (max-pycor) [ set plabel "SITE-2" ]
   ask patch (max-pxcor - 1) (max-pycor - 1) [ set plabel "Quality:" ]
   ask patch (max-pxcor - 2) (max-pycor - 2) [ set plabel blue-site-quality ]
-  ask patch 1 (max-pycor) [ set plabel "NEST" ]
+  ask patch 1 (min-pycor + 1) [ set plabel "NEST" ]
   create-bees number-of-red-bees
   [
     init-bees
@@ -90,7 +90,7 @@ to go
             if red-neighbor < blue-neighbor [ set-opinion 2 ]
           ]
         ]
-        if opinion != original-opinion [ set label "TRAITOR!" ]
+       ; if opinion != original-opinion [ set label "TRAITOR!" ]
       ]
       set state "exploration"
     ]
@@ -210,9 +210,9 @@ ticks
 30.0
 
 BUTTON
-624
-546
-741
+528
+527
+706
 590
 NIL
 Setup
@@ -227,8 +227,8 @@ NIL
 1
 
 BUTTON
-747
-546
+710
+528
 864
 589
 NIL
@@ -400,9 +400,9 @@ ticks
 9
 
 BUTTON
-354
+224
 487
-526
+646
 520
 Flip RED BLUE Quality
 let tmp blue-site-quality\nset blue-site-quality red-site-quality\nset red-site-quality tmp\n  ask patch (min-pxcor + 2) (max-pycor - 2) [ set plabel red-site-quality ]\n  ask patch (max-pxcor - 2) (max-pycor - 2) [ set plabel blue-site-quality ]

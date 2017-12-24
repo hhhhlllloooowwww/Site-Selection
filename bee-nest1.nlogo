@@ -40,10 +40,13 @@ to setup
   ask blue-site [ set pcolor blue - 1.5]
   set red-site patches with [ (pxcor <= -25) and (pxcor >= -30) and (pycor <= 16) and (pycor >= -16) ]
   ask red-site [ set pcolor red - 1.5]
-  ask patch (min-pxcor + 3) (max-pycor - 1) [ set plabel "Quality:" ]
+  ask patch (min-pxcor + 4) (max-pycor) [ set plabel "SITE-1" ]
+  ask patch (min-pxcor + 4) (max-pycor - 1) [ set plabel "Quality:" ]
   ask patch (min-pxcor + 2) (max-pycor - 2) [ set plabel red-site-quality ]
+  ask patch (max-pxcor - 1) (max-pycor) [ set plabel "SITE-2" ]
   ask patch (max-pxcor - 1) (max-pycor - 1) [ set plabel "Quality:" ]
   ask patch (max-pxcor - 2) (max-pycor - 2) [ set plabel blue-site-quality ]
+  ask patch 1 (max-pycor) [ set plabel "NEST" ]
   create-bees number-of-red-bees
   [
     init-bees
@@ -207,10 +210,10 @@ ticks
 30.0
 
 BUTTON
-803
-486
-869
-538
+624
+546
+741
+590
 NIL
 Setup
 NIL
@@ -224,10 +227,10 @@ NIL
 1
 
 BUTTON
-803
-547
-871
-598
+747
+546
+864
+589
 NIL
 Go
 T
@@ -241,26 +244,26 @@ NIL
 1
 
 MONITOR
-876
-372
-959
-429
-Red Bees
+1096
+442
+1182
+479
+Red bees now
 count bees with [opinion = 1]
 0
 1
-14
+9
 
 MONITOR
 1096
-372
-1176
-425
-Blue Bees
+526
+1184
+563
+Blue bees now
 count bees with [opinion = 2]
 0
 1
-13
+9
 
 PLOT
 873
@@ -282,55 +285,55 @@ PENS
 "Blue" 1.0 0 -14070903 true "" "plot count bees with [opinion = 2] / total-bees"
 
 SLIDER
-12
-487
-184
-520
-red-site-quality
-red-site-quality
-0.5
-2
-2.0
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-12
-526
-184
-559
-blue-site-quality
-blue-site-quality
-0.5
-2
-0.5
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-204
-565
-394
-598
-sensor-distance
-sensor-distance
-0.1
-2
-2.0
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-203
+47
 486
-392
+219
 519
+red-site-quality
+red-site-quality
+0.5
+2
+2.0
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+652
+484
+824
+517
+blue-site-quality
+blue-site-quality
+0.5
+2
+0.5
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+878
+406
+1175
+439
+sensor-distance
+sensor-distance
+0.1
+2
+2.0
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+878
+445
+1081
+478
 number-of-red-bees
 number-of-red-bees
 1
@@ -342,10 +345,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-204
-527
-394
-560
+878
+528
+1082
+561
 number-of-blue-bees
 number-of-blue-bees
 0
@@ -376,33 +379,33 @@ PENS
 "BLUE" 1.0 0 -14454117 true "" "plot blue-site-quality"
 
 CHOOSER
-873
-323
-1178
-368
+876
+358
+1177
+403
 voting-model
 voting-model
 "Voter" "Majority Rule"
-1
+0
 
 MONITOR
-971
-372
-1078
-429
+874
+319
+1177
+356
 Ticks
 ticks
 17
 1
-14
+9
 
 BUTTON
-13
-564
-185
-597
+354
+487
+526
+520
 Flip RED BLUE Quality
-let tmp blue-site-quality\nset blue-site-quality red-site-quality\nset red-site-quality tmp\n
+let tmp blue-site-quality\nset blue-site-quality red-site-quality\nset red-site-quality tmp\n  ask patch (min-pxcor + 2) (max-pycor - 2) [ set plabel red-site-quality ]\n  ask patch (max-pxcor - 2) (max-pycor - 2) [ set plabel blue-site-quality ]
 NIL
 1
 T
@@ -414,10 +417,10 @@ NIL
 1
 
 SLIDER
-417
-488
-623
-521
+879
+482
+1082
+515
 red-stubborn-agent-pct
 red-stubborn-agent-pct
 0
@@ -425,14 +428,14 @@ red-stubborn-agent-pct
 2.0
 1
 1
-NIL
+%
 HORIZONTAL
 
 SLIDER
-418
-544
-624
-577
+879
+566
+1083
+599
 blue-stubborn-agent-pct
 blue-stubborn-agent-pct
 0
@@ -440,30 +443,30 @@ blue-stubborn-agent-pct
 2.0
 1
 1
-NIL
+%
 HORIZONTAL
 
 MONITOR
-642
-485
-751
-530
-# Red Stubborn
+1096
+482
+1181
+519
+Red Stubborn
 num-red-stubborn
 17
 1
-11
+9
 
 MONITOR
-642
-540
-751
-585
-# BLUE Stubborn
+1097
+565
+1184
+602
+Blue Stubborn
 num-blue-stubborn
 17
 1
-11
+9
 
 @#$#@#$#@
 ## WHAT IS IT?

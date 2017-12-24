@@ -75,19 +75,23 @@ to go
           let nearby-bee one-of bees in-radius sensor-distance with [ init = 1 ]
           if (nearby-bee != nobody) and (init = 1) and (state = "dissemination") [
            set-opinion [ opinion ] of nearby-bee
+           if opinion != original-opinion [ set label "TRAITOR!" ]
+           ;set label "OK"
           ]
          ]
 
          if voting-model = "Majority Rule" [ ; ############# MAJORITY RULE ########################################
+          let original-opinion opinion
           let nearby-bees bees in-radius sensor-distance with [ init = 1 ]
           if (nearby-bees != nobody) and (init = 1) [
             let red-neighbor count nearby-bees with [opinion = 1]
             let blue-neighbor count nearby-bees with [opinion = 2]
             if red-neighbor > blue-neighbor [ set-opinion 1 ]
             if red-neighbor < blue-neighbor [ set-opinion 2 ]
+            if opinion != original-opinion [ set label "TRAITOR!" ]
+            ;set label "OK"
           ]
         ]
-        if opinion != original-opinion [ set label "TRAITOR!" ]
       ]
       set state "exploration"
     ]
@@ -290,7 +294,7 @@ red-site-quality
 red-site-quality
 0.5
 2
-2.0
+0.5
 0.1
 1
 NIL
@@ -305,7 +309,7 @@ blue-site-quality
 blue-site-quality
 0.5
 2
-0.5
+2.0
 0.1
 1
 NIL

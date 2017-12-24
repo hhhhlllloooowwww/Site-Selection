@@ -46,7 +46,7 @@ to setup
   ask patch (max-pxcor - 1) (max-pycor) [ set plabel "SITE-2" ]
   ask patch (max-pxcor - 1) (max-pycor - 1) [ set plabel "Quality:" ]
   ask patch (max-pxcor - 2) (max-pycor - 2) [ set plabel blue-site-quality ]
-  ask patch 1 (min-pycor + 1) [ set plabel "NEST" ]
+  ask patch 1 (min-pycor) [ set plabel "NEST" ]
   create-bees number-of-red-bees
   [
     init-bees
@@ -103,7 +103,7 @@ to go
     if within nest [
       if state = "dissemination" [
         set boundary nest
-        rt vary -45 45 ; head to random angle between -45 to 45 degree
+        rt vary -5 45 ; head to random angle between -45 to 45 degree
       ]
       if state = "exploration" [
         set boundary arena
@@ -246,7 +246,7 @@ NIL
 MONITOR
 1096
 442
-1182
+1175
 479
 Red bees now
 count bees with [opinion = 1]
@@ -257,7 +257,7 @@ count bees with [opinion = 1]
 MONITOR
 1096
 526
-1184
+1176
 563
 Blue bees now
 count bees with [opinion = 2]
@@ -293,7 +293,7 @@ red-site-quality
 red-site-quality
 0.5
 2
-2.0
+0.7
 0.1
 1
 NIL
@@ -449,7 +449,7 @@ HORIZONTAL
 MONITOR
 1096
 482
-1181
+1176
 519
 Red Stubborn
 num-red-stubborn
@@ -460,7 +460,7 @@ num-red-stubborn
 MONITOR
 1097
 565
-1184
+1177
 602
 Blue Stubborn
 num-blue-stubborn

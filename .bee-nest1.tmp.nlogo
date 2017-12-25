@@ -34,7 +34,7 @@ to setup
   set max-time-on-site 500
   set max-time-on-nest 1000
   set arena patches
-  set nest patches with [ (pxcor >= -1) and (pxcor <= 10) and (pycor <= 0) and (pycor >= -16) ]
+  set nest patches with [ (pxcor >= -5) and (pxcor <= 5) and (pycor <= 16) and (pycor >= -16) ]
   ask nest [ set pcolor grey + 2]
   set blue-site patches with [ (pxcor >= 25) and (pxcor <= 30)  and (pycor <= 16) and (pycor >= -16) ]
   ask blue-site [ set pcolor blue - 1.5]
@@ -157,7 +157,7 @@ end
 to init-bees
   set time-on-site max-time-on-site
   set time-on-nest 0.5 * random max-time-on-nest
-  move-to one-of nest
+  move-to one-of free nest
   set state "exploration"
   set stubborn false
   set init 0 ; first time
@@ -338,7 +338,7 @@ number-of-red-bees
 number-of-red-bees
 1
 100
-100.0
+50.0
 1
 1
 NIL
@@ -353,7 +353,7 @@ number-of-blue-bees
 number-of-blue-bees
 0
 100
-100.0
+50.0
 1
 1
 NIL
@@ -425,7 +425,7 @@ red-stubborn-agent-pct
 red-stubborn-agent-pct
 0
 50
-2.0
+0.0
 1
 1
 %
@@ -440,7 +440,7 @@ blue-stubborn-agent-pct
 blue-stubborn-agent-pct
 0
 50
-2.0
+0.0
 1
 1
 %
@@ -814,6 +814,37 @@ NetLogo 6.0.2
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
+<experiments>
+  <experiment name="Bee-Nest-experiment" repetitions="2" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <metric>count turtles with [ opinion = 1 ]</metric>
+    <enumeratedValueSet variable="blue-site-quality">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="sensor-distance">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="voting-model">
+      <value value="&quot;Voter&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-of-blue-bees">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="blue-stubborn-agent-pct">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="red-site-quality">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="red-stubborn-agent-pct">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-of-red-bees">
+      <value value="50"/>
+    </enumeratedValueSet>
+  </experiment>
+</experiments>
 @#$#@#$#@
 @#$#@#$#@
 default

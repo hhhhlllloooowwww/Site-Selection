@@ -90,7 +90,7 @@ to go
             if red-neighbor < blue-neighbor [ set-opinion 2 ]
           ]
         ]
-        if opinion != original-opinion [ set label "TRAITOR!" ]
+        if opinion != original-opinion [ set label "TRAITO!" ]
       ]
       set state "exploration"
     ]
@@ -210,10 +210,10 @@ ticks
 30.0
 
 BUTTON
-624
-546
-741
-590
+316
+539
+433
+583
 NIL
 Setup
 NIL
@@ -227,10 +227,10 @@ NIL
 1
 
 BUTTON
-747
-546
-864
-589
+439
+539
+556
+582
 NIL
 Go
 T
@@ -400,10 +400,10 @@ ticks
 9
 
 BUTTON
-354
+316
 487
-526
-520
+554
+528
 Flip RED BLUE Quality
 let tmp blue-site-quality\nset blue-site-quality red-site-quality\nset red-site-quality tmp\n  ask patch (min-pxcor + 2) (max-pycor - 2) [ set plabel red-site-quality ]\n  ask patch (max-pxcor - 2) (max-pycor - 2) [ set plabel blue-site-quality ]
 NIL

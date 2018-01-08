@@ -30,58 +30,47 @@ to setup
   set total-bees number-of-blue-bees + number-of-red-bees
   set num-red-stubborn round (red-stubborn-agent-pct * number-of-red-bees / 100)
   set num-blue-stubborn round (blue-stubborn-agent-pct * number-of-blue-bees / 100)
-  set one-step 0.05
-  set max-time-on-site 500
-  set max-time-on-nest 1000
+  set one-step 0.1
+  set max-time-on-site 250
+  set max-time-on-nest 500
   set arena patches
-  set nest patches with [ (pxcor >= -5) and (pxcor <= 5) and (pycor <= 16) and (pycor >= -16) ]
-  ask nest [ set pcolor grey + 2]
-  set blue-site patches with [ (pxcor >= 25) and (pxcor <= 30)  and (pycor <= 16) and (pycor >= -16) ]
-  ask blue-site [ set pcolor blue - 1.5]
-  set red-site patches with [ (pxcor <= -25) and (pxcor >= -30) and (pycor <= 16) and (pycor >= -16) ]
-  ask red-site [ set pcolor red - 1.5]
-  ask patch (min-pxcor + 4) (max-pycor) [ set plabel "SITE-1" ]
-  ask patch (min-pxcor + 4) (max-pycor - 1) [ set plabel "Quality:" ]
-  ask patch (min-pxcor + 2) (max-pycor - 2) [ set plabel red-site-quality ]
-  ask patch (max-pxcor - 1) (max-pycor) [ set plabel "SITE-2" ]
-  ask patch (max-pxcor - 1) (max-pycor - 1) [ set plabel "Quality:" ]
-  ask patch (max-pxcor - 2) (max-pycor - 2) [ set plabel blue-site-quality ]
-  ask patch 1 (max-pycor) [ set plabel "NEST" ]
-  create-bees number-of-red-bees
+  create-sites-and-nest                 ; create sites and nest
+  create-bees number-of-red-bees        ; create red bees
   [
     init-bees
     set-opinion 1
   ]
-  create-bees number-of-blue-bees
+  create-bees number-of-blue-bees       ; create blue bees
   [
     init-bees
     set-opinion 2
   ]
   if num-red-stubborn > 0 [
     let red-stubborn-bees n-of num-red-stubborn bees with [ opinion = 1]
-    ask red-stubborn-bees [ set stubborn true set shape "butterfly" ]
+    ask red-stubborn-bees [ make-stubborn ]
   ]
   if num-blue-stubborn > 0 [
     let blue-stubborn-bees n-of num-blue-stubborn bees with [ opinion = 2]
-    ask blue-stubborn-bees [ set stubborn true set shape "butterfly" ]
+    ask blue-stubborn-bees [ make-stubborn ]
   ]
   reset-ticks
 end
 
 to go
+ ; every 0.005 [
   ask bees [
     if (time-on-nest <= 0) [
       ; *********** DO VOTING ***************
-      if within nest and not stubborn [ ; only vote if within Nest and it is not Stubborn Agent
+      if within nest and not stubborn [          ; only vote if within Nest and it is not Stubborn Agent
          let original-opinion opinion
-         if voting-model = "Voter" [          ; ############# VOTER MODEL ##########################################
-          let nearby-bee one-of bees in-radius sensor-distance with [ init = 1 ]
-          if (nearby-bee != nobody) and (init = 1) and (state = "dissemination") [
-           set-opinion [ opinion ] of nearby-bee
+         if voting-model = "Voter" [             ; ############# VOTER MODEL ##########################################
+          let nearby-bee one-of bees in-radius sensor-distance with [ init = 1 ]     ; take random neighbour
+          if (nearby-bee != nobody) and (init = 1) and (state = "dissemination") [   ; if found one
+           set-opinion [ opinion ] of nearby-bee                                     ; change own opinion to her opinion
           ]
          ]
 
-         if voting-model = "Majority Rule" [ ; ############# MAJORITY RULE ########################################
+         if voting-model = "Majority Rule" [     ; ############# MAJORITY RULE ########################################
           let nearby-bees bees in-radius sensor-distance with [ init = 1 ]
           if (nearby-bees != nobody) and (init = 1) [
             let red-neighbor count nearby-bees with [opinion = 1]
@@ -90,20 +79,21 @@ to go
             if red-neighbor < blue-neighbor [ set-opinion 2 ]
           ]
         ]
-        if opinion != original-opinion [ set label "TRAITO!" ]
+        if opinion != original-opinion [ set label "SWITCHED!" ]
       ]
       set state "exploration"
     ]
-    if (time-on-site <= 0) [
-      set time-on-site max-time-on-site
-      set state "dissemination"
+
+    if (time-on-site <= 0) [                  ; if already finished exploring the site
+      set time-on-site max-time-on-site       ; reset timer
+      set state "dissemination"               ; and change to Dissemination state
     ]
 
     ; ******************** what to do inside the nest *********************
     if within nest [
       if state = "dissemination" [
         set boundary nest
-        rt vary -45 45 ; head to random angle between -45 to 45 degree
+        rt vary -65 5 ; head to random angle between -15 to 15 degree
       ]
       if state = "exploration" [
         set boundary arena
@@ -116,7 +106,7 @@ to go
     ; ******************** what to do inside the site *********************
     if (within red-site) or (within blue-site) [
       set init 1
-      set label ""
+      set label "" ; remove label
       let site-color pcolor
       if state = "exploration" [
         set boundary patches with [pcolor = site-color]
@@ -126,23 +116,43 @@ to go
         set boundary arena
         if opinion = 1 [
           set time-on-nest max-time-on-nest * red-site-quality
-          set heading towards one-of free nest ; return to nest
+          ;set heading towards one-of free nest ; return to nest
         ]
         if opinion = 2 [
           set time-on-nest max-time-on-nest * blue-site-quality
-          set heading towards one-of free nest ; return to nest
+          ;set heading towards one-of free nest ; return to nest
         ]
+        set heading towards one-of free nest ; return to nest
       ]
       set time-on-site time-on-site - 1
     ]
 
     ; ***********
     forward one-step
-    if (not within boundary) [ back one-step rt 150 ]
+    if (not within boundary) [ rt 180 ]
   ]
   tick
   ; stop when reach quorum
   if quorum [ stop ]
+;  ]
+end
+
+to create-sites-and-nest
+  ask patches [ set pcolor green - 2 ]
+  set blue-site patches with [ (pxcor >= 25) and (pxcor <= 30)  and (pycor <= 16) and (pycor >= -16) ]
+  ask blue-site [ set pcolor blue - 1.5]
+  set red-site patches with [ (pxcor <= -25) and (pxcor >= -30) and (pycor <= 16) and (pycor >= -16) ]
+  ask red-site [ set pcolor red - 1.5]
+  ask patches [ set plabel-color yellow ]
+  ask patch (min-pxcor + 4) (2) [ set plabel "SITE-1" ]
+  ask patch (min-pxcor + 4) (0) [ set plabel "Quality:" ]
+  ask patch (min-pxcor + 3) (-2) [ set plabel red-site-quality ]
+  ask patch (max-pxcor - 1) (2) [ set plabel "SITE-2" ]
+  ask patch (max-pxcor - 1) (0) [ set plabel "Quality:" ]
+  ask patch (max-pxcor - 2) (-2) [ set plabel blue-site-quality ]
+  set nest patches with [ (pxcor >= -5) and (pxcor <= 5) and (pycor <= 16) and (pycor >= -16) ]
+  ask nest [ set pcolor brown - 2]
+  ask patch 1 (max-pycor - 1) [ set plabel-color white set plabel "NEST" ]
 end
 
 to set-opinion [ choice ]
@@ -161,6 +171,11 @@ to init-bees
   set state "exploration"
   set stubborn false
   set init 0 ; first time
+end
+
+to make-stubborn
+  set stubborn true
+  set shape "butterfly"
 end
 
 to-report free [ arena-patches ] ; turtle procedure
@@ -183,13 +198,13 @@ to-report quorum
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-9
-10
-871
-481
+20
+13
+728
+400
 -1
 -1
-14.0
+11.48
 1
 14
 1
@@ -210,10 +225,10 @@ ticks
 30.0
 
 BUTTON
-316
-539
-433
-583
+736
+404
+945
+466
 NIL
 Setup
 NIL
@@ -227,10 +242,10 @@ NIL
 1
 
 BUTTON
-439
-539
-556
-582
+736
+470
+946
+550
 NIL
 Go
 T
@@ -244,39 +259,39 @@ NIL
 1
 
 MONITOR
-1096
+19
+405
+81
 442
-1182
-479
-Red bees now
+# Red
 count bees with [opinion = 1]
 0
 1
 9
 
 MONITOR
-1096
-526
-1184
-563
-Blue bees now
+522
+406
+586
+443
+# Blue
 count bees with [opinion = 2]
 0
 1
 9
 
 PLOT
-873
-11
-1177
-165
+732
+14
+946
+187
 Percentage number of Bees
 NIL
 % 
 0.0
 0.0
 0.0
-0.0
+1.0
 true
 true
 "" ""
@@ -285,12 +300,27 @@ PENS
 "Blue" 1.0 0 -14070903 true "" "plot count bees with [opinion = 2] / total-bees"
 
 SLIDER
-47
-486
-219
-519
+17
+444
+221
+477
 red-site-quality
 red-site-quality
+0.5
+2
+0.6
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
+521
+447
+726
+480
+blue-site-quality
+blue-site-quality
 0.5
 2
 2.0
@@ -300,25 +330,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-652
-484
-824
-517
-blue-site-quality
-blue-site-quality
-0.5
-2
-0.5
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-878
-406
-1175
-439
+232
+407
+513
+441
 sensor-distance
 sensor-distance
 0.1
@@ -330,10 +345,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-878
-445
-1081
-478
+17
+481
+220
+514
 number-of-red-bees
 number-of-red-bees
 1
@@ -345,10 +360,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-878
-528
-1082
-561
+521
+483
+725
+516
 number-of-blue-bees
 number-of-blue-bees
 0
@@ -360,15 +375,15 @@ NIL
 HORIZONTAL
 
 PLOT
-873
-168
-1177
-318
+733
+191
+945
+355
 Quality
 NIL
 NIL
 0.0
-10.0
+0.0
 0.0
 2.0
 true
@@ -379,20 +394,20 @@ PENS
 "BLUE" 1.0 0 -14454117 true "" "plot blue-site-quality"
 
 CHOOSER
-876
-358
-1177
-403
+232
+505
+513
+550
 voting-model
 voting-model
 "Voter" "Majority Rule"
 0
 
 MONITOR
-874
-319
-1177
-356
+735
+360
+945
+397
 Ticks
 ticks
 17
@@ -400,10 +415,10 @@ ticks
 9
 
 BUTTON
-316
-487
-554
-528
+232
+446
+513
+498
 Flip RED BLUE Quality
 let tmp blue-site-quality\nset blue-site-quality red-site-quality\nset red-site-quality tmp\n  ask patch (min-pxcor + 2) (max-pycor - 2) [ set plabel red-site-quality ]\n  ask patch (max-pxcor - 2) (max-pycor - 2) [ set plabel blue-site-quality ]
 NIL
@@ -417,40 +432,40 @@ NIL
 1
 
 SLIDER
-879
-482
-1082
-515
+17
+518
+220
+551
 red-stubborn-agent-pct
 red-stubborn-agent-pct
 0
 50
-0.0
+4.0
 1
 1
 %
 HORIZONTAL
 
 SLIDER
-879
-566
-1083
-599
+521
+519
+725
+552
 blue-stubborn-agent-pct
 blue-stubborn-agent-pct
 0
 50
-0.0
+4.0
 1
 1
 %
 HORIZONTAL
 
 MONITOR
-1096
-482
-1181
-519
+146
+405
+222
+442
 Red Stubborn
 num-red-stubborn
 17
@@ -458,12 +473,34 @@ num-red-stubborn
 9
 
 MONITOR
-1097
-565
-1184
-602
+649
+406
+727
+443
 Blue Stubborn
 num-blue-stubborn
+17
+1
+9
+
+MONITOR
+81
+405
+138
+442
+( % )
+count bees with [opinion = 1] * 100 / total-bees
+0
+1
+9
+
+MONITOR
+586
+406
+641
+443
+( % )
+count bees with [opinion = 2] * 100 / total-bees
 17
 1
 9

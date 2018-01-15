@@ -57,7 +57,7 @@ to setup
 end
 
 to go
- ; every 0.005 [
+  every 0.005 [
   ask bees [
     if (time-on-nest <= 0) [
       ; *********** DO VOTING ***************
@@ -93,7 +93,7 @@ to go
     if within nest [
       if state = "dissemination" [
         set boundary nest
-        rt vary -65 5 ; head to random angle between -15 to 15 degree
+        rt vary -25 25 ; head to random angle between -15 to 15 degree
       ]
       if state = "exploration" [
         set boundary arena
@@ -285,7 +285,7 @@ PLOT
 14
 946
 187
-Percentage number of Bees
+# of bees ( % )
 NIL
 % 
 0.0
@@ -308,7 +308,7 @@ red-site-quality
 red-site-quality
 0.5
 2
-0.6
+0.5
 0.1
 1
 NIL
@@ -333,7 +333,7 @@ SLIDER
 232
 407
 513
-441
+440
 sensor-distance
 sensor-distance
 0.1
@@ -379,7 +379,7 @@ PLOT
 191
 945
 355
-Quality
+Site Quality
 NIL
 NIL
 0.0
@@ -401,7 +401,7 @@ CHOOSER
 voting-model
 voting-model
 "Voter" "Majority Rule"
-0
+1
 
 MONITOR
 735
@@ -420,7 +420,7 @@ BUTTON
 513
 498
 Flip RED BLUE Quality
-let tmp blue-site-quality\nset blue-site-quality red-site-quality\nset red-site-quality tmp\n  ask patch (min-pxcor + 2) (max-pycor - 2) [ set plabel red-site-quality ]\n  ask patch (max-pxcor - 2) (max-pycor - 2) [ set plabel blue-site-quality ]
+let tmp blue-site-quality\nset blue-site-quality red-site-quality\nset red-site-quality tmp\n  ask patch (min-pxcor + 3) (-2) [ set plabel red-site-quality ]\n  ask patch (max-pxcor - 2) (-2) [ set plabel blue-site-quality ]
 NIL
 1
 T
@@ -440,7 +440,7 @@ red-stubborn-agent-pct
 red-stubborn-agent-pct
 0
 50
-4.0
+0.0
 1
 1
 %
@@ -455,7 +455,7 @@ blue-stubborn-agent-pct
 blue-stubborn-agent-pct
 0
 50
-4.0
+0.0
 1
 1
 %

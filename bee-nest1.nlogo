@@ -57,7 +57,7 @@ to setup
 end
 
 to go
- ; every 0.005 [
+  every 0.005 [
   ask bees [
     if (time-on-nest <= 0) [
       ; *********** DO VOTING ***************
@@ -133,8 +133,8 @@ to go
   ]
   tick
   ; stop when reach quorum
-  if quorum [ stop ]
-;  ]
+  ; if quorum [ stop ]
+  ]
 end
 
 to create-sites-and-nest
@@ -158,9 +158,9 @@ end
 to set-opinion [ choice ]
   set opinion choice
   ifelse choice = 1 [
-    set color red + 1.5
+    set color red + 1
   ] [
-    set color blue + 1.5
+    set color blue + 1
   ]
 end
 
@@ -176,6 +176,8 @@ end
 to make-stubborn
   set stubborn true
   set shape "butterfly"
+  set size 1.2
+  set color color + 1
 end
 
 to-report free [ arena-patches ] ; turtle procedure
@@ -227,8 +229,8 @@ ticks
 BUTTON
 736
 404
-945
-466
+1086
+467
 NIL
 Setup
 NIL
@@ -244,7 +246,7 @@ NIL
 BUTTON
 736
 470
-946
+1086
 550
 NIL
 Go
@@ -283,21 +285,21 @@ count bees with [opinion = 2]
 PLOT
 732
 14
-946
-187
+1085
+188
 # of bees ( % )
 NIL
 % 
 0.0
 0.0
 0.0
-1.0
+100.0
 true
 true
 "" ""
 PENS
-"Red" 1.0 0 -2674135 true "" "plot count bees with [opinion = 1] / total-bees"
-"Blue" 1.0 0 -14070903 true "" "plot count bees with [opinion = 2] / total-bees"
+"Red" 1.0 0 -2674135 true "" "plot 100 * count bees with [opinion = 1] / total-bees"
+"Blue" 1.0 0 -14070903 true "" "plot 100 * count bees with [opinion = 2] / total-bees"
 
 SLIDER
 17
@@ -333,7 +335,7 @@ SLIDER
 232
 407
 513
-441
+440
 sensor-distance
 sensor-distance
 0.1
@@ -353,7 +355,7 @@ number-of-red-bees
 number-of-red-bees
 1
 100
-50.0
+59.0
 1
 1
 NIL
@@ -377,8 +379,8 @@ HORIZONTAL
 PLOT
 733
 191
-945
-355
+1086
+356
 Site Quality
 NIL
 NIL
@@ -401,13 +403,13 @@ CHOOSER
 voting-model
 voting-model
 "Voter" "Majority Rule"
-1
+0
 
 MONITOR
 735
 360
-945
-397
+1085
+398
 Ticks
 ticks
 17

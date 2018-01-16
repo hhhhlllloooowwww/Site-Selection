@@ -132,8 +132,16 @@ to go
     if (not within boundary) [ rt 180 ]
   ]
   tick
+  if (ticks = autswitch-t) [
+      let tmp blue-site-quality
+      set blue-site-quality red-site-quality
+      set red-site-quality tmp
+      ask patch (min-pxcor + 3) (-2) [ set plabel red-site-quality ]
+      ask patch (max-pxcor - 2) (-2) [ set plabel blue-site-quality ]
+  ]
   ; stop when reach quorum
-  ;if quorum [ stop ]
+  ; if quorum [ stop ]
+    if ticks = 35000 [ stop ]
   ]
 end
 
@@ -228,9 +236,9 @@ ticks
 
 BUTTON
 736
-404
+446
 1086
-467
+498
 NIL
 Setup
 NIL
@@ -245,7 +253,7 @@ NIL
 
 BUTTON
 736
-470
+500
 1086
 550
 NIL
@@ -310,7 +318,7 @@ red-site-quality
 red-site-quality
 0.5
 2
-2.0
+0.5
 0.1
 1
 NIL
@@ -325,7 +333,7 @@ blue-site-quality
 blue-site-quality
 0.5
 2
-0.5
+2.0
 0.1
 1
 NIL
@@ -396,10 +404,10 @@ PENS
 "BLUE" 1.0 0 -14454117 true "" "plot blue-site-quality"
 
 CHOOSER
-232
-505
-513
-550
+735
+399
+1084
+444
 voting-model
 voting-model
 "Voter" "Majority Rule"
@@ -420,7 +428,7 @@ BUTTON
 232
 446
 513
-498
+515
 Flip RED BLUE Quality
 let tmp blue-site-quality\nset blue-site-quality red-site-quality\nset red-site-quality tmp\n  ask patch (min-pxcor + 3) (-2) [ set plabel red-site-quality ]\n  ask patch (max-pxcor - 2) (-2) [ set plabel blue-site-quality ]
 NIL
@@ -506,6 +514,21 @@ count bees with [opinion = 2] * 100 / total-bees
 17
 1
 9
+
+SLIDER
+233
+520
+513
+553
+autoswitch-t
+autoswitch-t
+1000
+30000
+7000.0
+1000
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -878,6 +901,127 @@ NetLogo 6.0.2
     </enumeratedValueSet>
     <enumeratedValueSet variable="red-stubborn-agent-pct">
       <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-of-red-bees">
+      <value value="50"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="Bee-Site-Dynamic-Switch-at-t-20k-no-stubborn" repetitions="5" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="35000"/>
+    <metric>count bees with [opinion = 1] * 100 / total-bees</metric>
+    <enumeratedValueSet variable="blue-site-quality">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="sensor-distance">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="voting-model">
+      <value value="&quot;Voter&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-of-blue-bees">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="blue-stubborn-agent-pct">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="red-site-quality">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="red-stubborn-agent-pct">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-of-red-bees">
+      <value value="50"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="Bee-Site-Dynamic-Switch-at-t-20k-2pct-stubborn" repetitions="5" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="35000"/>
+    <metric>count bees with [opinion = 1] * 100 / total-bees</metric>
+    <enumeratedValueSet variable="blue-site-quality">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="sensor-distance">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="voting-model">
+      <value value="&quot;Voter&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-of-blue-bees">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="blue-stubborn-agent-pct">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="red-site-quality">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="red-stubborn-agent-pct">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-of-red-bees">
+      <value value="50"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="Bee-Site-Dynamic-Switch-at-t-7k-no-stubborn" repetitions="5" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="35000"/>
+    <metric>count bees with [opinion = 1] * 100 / total-bees</metric>
+    <metric>count bees with [opinion = 2] * 100 / total-bees</metric>
+    <enumeratedValueSet variable="blue-site-quality">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="sensor-distance">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="voting-model">
+      <value value="&quot;Voter&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-of-blue-bees">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="blue-stubborn-agent-pct">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="red-site-quality">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="red-stubborn-agent-pct">
+      <value value="0"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-of-red-bees">
+      <value value="50"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="Bee-Site-Dynamic-Switch-at-t-7k-2pct-stubborn" repetitions="5" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="35000"/>
+    <metric>count bees with [opinion = 1] * 100 / total-bees</metric>
+    <enumeratedValueSet variable="blue-site-quality">
+      <value value="0.5"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="sensor-distance">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="voting-model">
+      <value value="&quot;Voter&quot;"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="number-of-blue-bees">
+      <value value="50"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="blue-stubborn-agent-pct">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="red-site-quality">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="red-stubborn-agent-pct">
+      <value value="2"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="number-of-red-bees">
       <value value="50"/>

@@ -132,7 +132,7 @@ to go
     if (not within boundary) [ rt 180 ]
   ]
   tick
-  if (ticks = autswitch-t) [
+  if (ticks = qualityswitch-t) [
       let tmp blue-site-quality
       set blue-site-quality red-site-quality
       set red-site-quality tmp
@@ -236,9 +236,9 @@ ticks
 
 BUTTON
 736
-446
-1086
-498
+455
+880
+502
 NIL
 Setup
 NIL
@@ -253,9 +253,9 @@ NIL
 
 BUTTON
 736
-500
+510
 1086
-550
+566
 NIL
 Go
 T
@@ -272,23 +272,23 @@ MONITOR
 19
 405
 81
-442
+454
 # Red
 count bees with [opinion = 1]
 0
 1
-9
+12
 
 MONITOR
 522
 406
 586
-443
+455
 # Blue
 count bees with [opinion = 2]
 0
 1
-9
+12
 
 PLOT
 732
@@ -311,26 +311,11 @@ PENS
 
 SLIDER
 17
-444
+459
 221
-477
+492
 red-site-quality
 red-site-quality
-0.5
-2
-0.5
-0.1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-521
-447
-726
-480
-blue-site-quality
-blue-site-quality
 0.5
 2
 2.0
@@ -340,10 +325,25 @@ NIL
 HORIZONTAL
 
 SLIDER
+521
+462
+726
+495
+blue-site-quality
+blue-site-quality
+0.5
+2
+0.5
+0.1
+1
+NIL
+HORIZONTAL
+
+SLIDER
 232
-407
+535
 513
-440
+568
 sensor-distance
 sensor-distance
 0.1
@@ -356,9 +356,9 @@ HORIZONTAL
 
 SLIDER
 17
-481
+496
 220
-514
+529
 number-of-red-bees
 number-of-red-bees
 1
@@ -371,9 +371,9 @@ HORIZONTAL
 
 SLIDER
 521
-483
+498
 725
-516
+531
 number-of-blue-bees
 number-of-blue-bees
 0
@@ -405,9 +405,9 @@ PENS
 
 CHOOSER
 735
-399
+407
 1084
-444
+452
 voting-model
 voting-model
 "Voter" "Majority Rule"
@@ -426,9 +426,9 @@ ticks
 
 BUTTON
 232
-446
+461
 513
-515
+530
 Flip RED BLUE Quality
 let tmp blue-site-quality\nset blue-site-quality red-site-quality\nset red-site-quality tmp\n  ask patch (min-pxcor + 3) (-2) [ set plabel red-site-quality ]\n  ask patch (max-pxcor - 2) (-2) [ set plabel blue-site-quality ]
 NIL
@@ -443,14 +443,14 @@ NIL
 
 SLIDER
 17
-518
+533
 220
-551
+566
 red-stubborn-agent-pct
 red-stubborn-agent-pct
 0
-50
-2.0
+10
+0.0
 1
 1
 %
@@ -458,14 +458,14 @@ HORIZONTAL
 
 SLIDER
 521
-519
+534
 725
-552
+567
 blue-stubborn-agent-pct
 blue-stubborn-agent-pct
 0
-50
-2.0
+10
+0.0
 1
 1
 %
@@ -474,61 +474,95 @@ HORIZONTAL
 MONITOR
 146
 405
-222
-442
+221
+454
 Red Stubborn
 num-red-stubborn
 17
 1
-9
+12
 
 MONITOR
 649
 406
 727
-443
+455
 Blue Stubborn
 num-blue-stubborn
 17
 1
-9
+12
 
 MONITOR
 81
 405
 138
-442
+454
 ( % )
 count bees with [opinion = 1] * 100 / total-bees
 0
 1
-9
+12
 
 MONITOR
 586
 406
-641
-443
+643
+455
 ( % )
 count bees with [opinion = 2] * 100 / total-bees
 17
 1
-9
+12
 
 SLIDER
 233
-520
+410
 513
-553
-autoswitch-t
-autoswitch-t
+443
+qualityswitch-t
+qualityswitch-t
 1000
-30000
-7000.0
+40000
+20000.0
 1000
 1
-NIL
+ticks
 HORIZONTAL
+
+BUTTON
+884
+456
+981
+502
+No stubb
+setup\nset red-stubborn-agent-pct 0\nset blue-stubborn-agent-pct 0\nset blue-site-quality 0.5\nset red-site-quality 2\nask patch (min-pxcor + 3) (-2) [ set plabel red-site-quality ]\nask patch (max-pxcor - 2) (-2) [ set plabel blue-site-quality ]
+NIL
+1
+T
+OBSERVER
+NIL
+1
+NIL
+NIL
+1
+
+BUTTON
+986
+457
+1082
+503
+2% stubb
+setup\nset red-stubborn-agent-pct 2\nset blue-stubborn-agent-pct 2\nset blue-site-quality 0.5\nset red-site-quality 2\nask patch (min-pxcor + 3) (-2) [ set plabel red-site-quality ]\nask patch (max-pxcor - 2) (-2) [ set plabel blue-site-quality ]
+NIL
+1
+T
+OBSERVER
+NIL
+2
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?

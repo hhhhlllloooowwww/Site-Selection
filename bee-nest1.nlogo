@@ -9,6 +9,7 @@ globals [
   num-blue-stubborn
   one-step
   total-bees
+  Noise-value
 ]
 
 breed [bees bee]
@@ -114,12 +115,16 @@ to go
       ]
       if state = "dissemination" [
         set boundary arena
+        set Noise-value 0
+        if (Noise) [
+          set Noise-value random-normal 0 0.1
+        ]
         if opinion = 1 [
-          set time-on-nest max-time-on-nest * red-site-quality
+          set time-on-nest max-time-on-nest * red-site-quality +  Noise-value
           ;set heading towards one-of free nest ; return to nest
         ]
         if opinion = 2 [
-          set time-on-nest max-time-on-nest * blue-site-quality
+          set time-on-nest max-time-on-nest * blue-site-quality + Noise-value
           ;set heading towards one-of free nest ; return to nest
         ]
         set heading towards one-of free nest ; return to nest
@@ -132,12 +137,14 @@ to go
     if (not within boundary) [ rt 180 ]
   ]
   tick
-  if (ticks = qualityswitch-t) [
+  if (qualityswitch-t > 0) [
+    if (ticks = qualityswitch-t) [
       let tmp blue-site-quality
       set blue-site-quality red-site-quality
       set red-site-quality tmp
       ask patch (min-pxcor + 3) (-2) [ set plabel red-site-quality ]
       ask patch (max-pxcor - 2) (-2) [ set plabel blue-site-quality ]
+    ]
   ]
   ; stop when reach quorum
   ; if quorum [ stop ]
@@ -342,7 +349,7 @@ HORIZONTAL
 SLIDER
 232
 407
-513
+410
 440
 sensor-distance
 sensor-distance
@@ -417,7 +424,7 @@ MONITOR
 735
 360
 1085
-398
+397
 Ticks
 ticks
 17
@@ -522,13 +529,24 @@ SLIDER
 553
 qualityswitch-t
 qualityswitch-t
-1000
+0
 30000
-3000.0
+0.0
 1000
 1
 ticks
 HORIZONTAL
+
+SWITCH
+414
+408
+517
+441
+Noise
+Noise
+0
+1
+-1000
 
 @#$#@#$#@
 ## WHAT IS IT?

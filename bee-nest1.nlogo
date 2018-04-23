@@ -8,7 +8,8 @@ globals [
   num-red-stubborn
   num-blue-stubborn
   one-step
-  total-bees
+  number-of-blue-bees
+  number-of-red-bees
   Noise-value
 ]
 
@@ -28,9 +29,10 @@ bees-own [
 
 to setup
   clear-all
-  set total-bees number-of-blue-bees + number-of-red-bees
-  set num-red-stubborn round (red-stubborn-agent-pct * number-of-red-bees / 100)
-  set num-blue-stubborn round (blue-stubborn-agent-pct * number-of-blue-bees / 100)
+  set number-of-red-bees total-bees * red-to-blue-composition / 100
+  set number-of-blue-bees total-bees - number-of-red-bees
+  set num-red-stubborn round (stubborn-agent-pct * number-of-red-bees / 100)
+  set num-blue-stubborn round (stubborn-agent-pct * number-of-blue-bees / 100)
   set one-step 0.1
   set max-time-on-site 250
   set max-time-on-nest 500
@@ -182,7 +184,7 @@ end
 to init-bees
   set time-on-site max-time-on-site
   set time-on-nest 0.5 * random max-time-on-nest
-  move-to one-of free nest
+  move-to one-of  nest
   set state "exploration"
   set stubborn false
   set init 0 ; first time
@@ -325,23 +327,23 @@ red-site-quality
 red-site-quality
 0.5
 2
-2.0
-0.1
+1.0
+0.05
 1
 NIL
 HORIZONTAL
 
 SLIDER
-521
-447
-726
-480
+17
+481
+222
+514
 blue-site-quality
 blue-site-quality
 0.5
-2
-0.5
-0.1
+3
+1.05
+0.05
 1
 NIL
 HORIZONTAL
@@ -354,24 +356,24 @@ SLIDER
 sensor-distance
 sensor-distance
 0.1
-2
+3
 2.0
-0.1
+0.05
 1
 NIL
 HORIZONTAL
 
 SLIDER
-17
-481
-220
-514
-number-of-red-bees
-number-of-red-bees
-1
-100
-50.0
-1
+522
+447
+725
+480
+total-bees
+total-bees
+40
+1000
+40.0
+2
 1
 NIL
 HORIZONTAL
@@ -381,12 +383,12 @@ SLIDER
 483
 725
 516
-number-of-blue-bees
-number-of-blue-bees
-0
-100
+red-to-blue-composition
+red-to-blue-composition
+10
+90
 50.0
-1
+10
 1
 NIL
 HORIZONTAL
@@ -449,31 +451,16 @@ NIL
 1
 
 SLIDER
-17
-518
-220
-551
-red-stubborn-agent-pct
-red-stubborn-agent-pct
-0
-50
-2.0
-1
-1
-%
-HORIZONTAL
-
-SLIDER
 521
 519
 725
 552
-blue-stubborn-agent-pct
-blue-stubborn-agent-pct
-0
-50
-2.0
-1
+stubborn-agent-pct
+stubborn-agent-pct
+5
+30
+5.0
+5
 1
 %
 HORIZONTAL
@@ -531,7 +518,7 @@ qualityswitch-t
 qualityswitch-t
 0
 30000
-0.0
+20000.0
 1000
 1
 ticks
@@ -1043,6 +1030,39 @@ NetLogo 6.0.2
     </enumeratedValueSet>
     <enumeratedValueSet variable="number-of-red-bees">
       <value value="50"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="Bee-Site-Dynamic-Switch-at-t-20k-size-40-to-300" repetitions="50" runMetricsEveryStep="true">
+    <setup>setup</setup>
+    <go>go</go>
+    <timeLimit steps="50000"/>
+    <metric>count bees with [opinion = 1] * 100 / total-bees</metric>
+    <enumeratedValueSet variable="total-bees">
+      <value value="40"/>
+      <value value="100"/>
+      <value value="300"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="stubborn-agent-pct">
+      <value value="5"/>
+      <value value="10"/>
+      <value value="20"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="red-site-quality">
+      <value value="1"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="blue-site-quality">
+      <value value="1.05"/>
+      <value value="1.5"/>
+      <value value="3"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="qualityswitch-t">
+      <value value="20000"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="sensor-distance">
+      <value value="2"/>
+    </enumeratedValueSet>
+    <enumeratedValueSet variable="voting-model">
+      <value value="&quot;Voter&quot;"/>
     </enumeratedValueSet>
   </experiment>
 </experiments>
